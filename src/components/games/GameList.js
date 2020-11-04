@@ -9,6 +9,12 @@ export const GameList = (props) => {
     }, [])
 
     return (
+        <>
+        <button 
+                className="createGameButton"
+                onClick={()=> {
+                props.history.push("/createGame")
+            }}>Create a Game</button>
         <article className="games">
             {
                 games.map(game => {
@@ -20,5 +26,6 @@ export const GameList = (props) => {
                 })
             }
         </article>
+        </>
     )
 }
