@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react"
 import { EventContext } from "./EventProvider.js"
 
 export const EventList = (props) => {
-    const { events, getEvents } = useContext(EventContext)
+    const { events, getEvents, joinEvent, leaveEvent } = useContext(EventContext)
 
     useEffect(() => {
         getEvents()
@@ -10,6 +10,11 @@ export const EventList = (props) => {
 
     return (
         <article className="events">
+            <button 
+                className="createEventButton"
+                onClick={()=> {
+                props.history.push("/createEvent")
+            }}>Create an Event</button>
             <header className="events__header">
                 <h1>Level Up Game Events</h1>
             </header>
@@ -30,6 +35,15 @@ export const EventList = (props) => {
                             }
                             @ {event.time} {event.location}
                         </div>
+                        {
+                            event.joined
+                            ? <button className="btn btn-3"
+                                onClick={() => leaveEvent(event.id)}
+                                >Leave</button>
+                            : <button className="btn btn-2"
+                                onClick={() => joinEvent(event.id)}
+                                >Join</button>
+                        }
                     </section>
                 })
             }
