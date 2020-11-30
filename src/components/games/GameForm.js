@@ -3,7 +3,7 @@ import { GameContext } from "./GameProvider.js"
 
 
 export const GameForm = props => {
-    const { createGame, getGameTypes, gameTypes, getGameTypes, getGameById } = useContext(GameContext)
+    const { createGame, getGameTypes, gameTypes, getGameById, updateGame } = useContext(GameContext)
 
     const editMode = props.match.params.hasOwnProperty("gameId")
 
@@ -11,7 +11,7 @@ export const GameForm = props => {
     for (let i = 1; i <= 20; i++) {
         numPlayers.push(i)
     }
-    let skillLevel = [1,2,3,4,5]
+    let skillLevel = [2,3,4,5]
 
     /*
         Since the input fields are bound to the values of
@@ -49,10 +49,37 @@ export const GameForm = props => {
         setCurrentGame(newGameState)
     }
 
+    const constructNewGame = () => {
+        const game = {
+            maker: currentGame.maker,
+            title: currentGame.title,
+            number_of_players: parseInt(currentGame.number_of_players),
+            skill_level: parseInt(currentGame.skill_level),
+            gametype_id: parseInt(currentGame.gametype_id)
+        }
+
+        if (editMode) {
+
+            game.id = currentGame.id
+            console.log(game)
+            updateGame(game)
+            .then(() => {
+                props.history.push("/")
+            })
+        }else{
+            createGame(game)
+            .then(() => {
+                props.history.push("/")
+            })
+
+        } 
+    }
+     
+
 
     return (
         <form className="gameForm">
-            <h2 className="gameForm__title">Register New Game</h2>
+            <h2 className="gameForm__title">{editMode? "Edit Game" : "Register New Game"}</h2>
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="title">Title: </label>
@@ -76,7 +103,7 @@ export const GameForm = props => {
                     <label htmlFor="gametype_id">Game Type: </label>
                     <select name="gametype_id" className="form-control" id="gametype"
                         proptype="int"
-                        value={currentGame.gametype_id}
+                        default value={currentGame.gametype_id}
                         onChange={handleControlledInputChange}>
 
                         <option value="0">Select a type</option>
@@ -126,22 +153,9 @@ export const GameForm = props => {
                 onClick={evt => {
                     // Prevent form from being submitted
                     evt.preventDefault()
-
-                    const game = {
-                        maker: currentGame.maker,
-                        title: currentGame.title,
-                        number_of_players: parseInt(currentGame.number_of_players),
-                        skill_level: parseInt(currentGame.skill_level),
-                        gametype_id: parseInt(currentGame.gametype_id)
-                    }
-
-                    // Send POST request to your API
-                    createGame(game)
-                    .then(() => {
-                        props.history.push("/")
-                    })
-                }}
-                className="btn btn-primary">Create</button>
+                    constructNewGame()
+                    }}
+                className="btn btn-primary">{editMode? "Update" : "Create"}</button>
         </form>
     )
 }
