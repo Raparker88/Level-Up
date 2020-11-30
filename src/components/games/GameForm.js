@@ -3,7 +3,9 @@ import { GameContext } from "./GameProvider.js"
 
 
 export const GameForm = props => {
-    const { createGame, getGameTypes, gameTypes } = useContext(GameContext)
+    const { createGame, getGameTypes, gameTypes, getGameTypes, getGameById } = useContext(GameContext)
+
+    const editMode = props.match.params.hasOwnProperty("gameId")
 
     let numPlayers = []
     for (let i = 1; i <= 20; i++) {
@@ -30,6 +32,11 @@ export const GameForm = props => {
     */
     useEffect(() => {
         getGameTypes()
+        if(editMode){
+            const gameId = parseInt(props.match.params.gameId)
+            getGameById(gameId)
+            .then(setCurrentGame)
+        }
     }, [])
 
     /*

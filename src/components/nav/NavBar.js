@@ -17,6 +17,9 @@ export const NavBar = (props) => {
                         <li className="navbar__item">
                             <Link className="nav-link" to="/events">Events</Link>
                         </li>
+                        <li className="navbar__item">
+                            <Link className="nav-link" to="/profile">Profile</Link>
+                        </li>
                         <li className="nav-item">
                             <button className="nav-link fakeLink"
                                 onClick={() => {
